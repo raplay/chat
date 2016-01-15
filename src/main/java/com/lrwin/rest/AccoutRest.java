@@ -1,7 +1,7 @@
 package com.lrwin.rest;
 
-import com.lrwin.domain.User;
-import com.lrwin.service.UserService;
+import com.lrwin.domain.Account;
+import com.lrwin.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,15 +18,15 @@ import java.util.List;
  * Description:
  */
 @RestController
-@RequestMapping("/user")
-public class UserRest {
+@RequestMapping("/account")
+public class AccoutRest {
 
     @Autowired
-    private UserService userService;
+    private AccountService accountService;
 
     @RequestMapping(method = RequestMethod.GET)
-    public List<User> getUser(){
+    public List<Account> getAccount(){
 
-        return userService.findAll();
+        return accountService.findAll();
     }
 }

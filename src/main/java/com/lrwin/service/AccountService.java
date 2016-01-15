@@ -1,6 +1,6 @@
 package com.lrwin.service;
 
-import com.lrwin.domain.User;
+import com.lrwin.domain.Account;
 
 import java.util.List;
 
@@ -12,6 +12,6 @@ import java.util.List;
  * Author:Lrwin
  * Description:
  */
-public interface UserService {
-    List<User> findAll();
+public interface AccountService {
+    List<Account> findAll();
 }

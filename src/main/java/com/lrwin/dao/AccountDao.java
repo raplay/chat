@@ -1,6 +1,6 @@
 package com.lrwin.dao;
 
-import com.lrwin.domain.User;
+import com.lrwin.domain.Account;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -11,6 +11,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * Author:Lrwin
  * Description:
  */
-public interface UserDao extends JpaRepository<User, Integer> {
+public interface AccountDao extends JpaRepository<Account, Integer> {
 
 }
