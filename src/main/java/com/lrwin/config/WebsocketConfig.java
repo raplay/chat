@@ -79,6 +79,7 @@ public class WebsocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
                 return;
             }
 //            sha.getUser().getName(); so.. Principal is important
+            logger.debug("username: " + sha.getUser().getName());
             String sessionId = sha.getSessionId();
             switch(sha.getCommand()) {
                 case CONNECT:

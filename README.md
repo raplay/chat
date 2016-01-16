@@ -2,6 +2,7 @@
 Using spring utils to develop chat system.Everybody can use it.
 
 # Develop environment
+ - JDK 8+
  - IDE : intellij idea 14    
  - require plugins :  Lombok plugin
 

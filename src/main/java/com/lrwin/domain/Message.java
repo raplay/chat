@@ -2,6 +2,8 @@ package com.lrwin.domain;
 
 import lombok.Data;
 
+import java.util.Date;
+
 /**
  * Created by dulei on 1/15/16.
  * Email:codingbaby@gmail.com
@@ -13,4 +15,5 @@ import lombok.Data;
 @Data
 public class Message {
     private String content;
+    private Date sendTime;
 }
