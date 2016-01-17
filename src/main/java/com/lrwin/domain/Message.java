@@ -15,5 +15,6 @@ import java.util.Date;
 @Data
 public class Message {
     private String content;
-    private Date sendTime;
+    private Date sendTime = new Date();
+    private String email;
 }

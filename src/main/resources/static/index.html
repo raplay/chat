@@ -23,10 +23,38 @@
             stompClient.connect({}, function(frame) {
                 setConnected(true);
                 console.log('Connected: ' + frame);
-                stompClient.subscribe('/topic/greeting', function(greeting){
-                    showGreeting(JSON.parse(greeting.body).content);
+                //find all accounts
+                stompClient.subscribe('/app/accounts', function(accounts){
+                    showAccounts(JSON.parse(accounts.body));
                 });
 
+                //directly to load online users
+                stompClient.subscribe('/app/loginUser', function(emails){
+                    var emailList = JSON.parse(emails.body);
+                    var content = "";
+                    for(var key in emailList){
+                        content += "  " + emailList[key];
+                    }
+                    showOnlineAccounts(content);
+                });
+
+                //listener login
+                stompClient.subscribe('/topic/chat.login', function(loginEvent){
+                    showOnlineAccounts(JSON.parse(loginEvent.body).email);
+                });
+
+                //listener logout
+                stompClient.subscribe('/topic/chat.logout', function(logoutEvent){
+                    var accountsp = document.getElementById('onlineAccounts');
+                    alert(accountsp.value);
+//                    showAccounts(JSON.parse(logoutEvent.body).email);
+                });
+
+                //private chat
+                stompClient.subscribe("/user/topic/amq.direct/chat.message", function(message) {
+                    var parsed = JSON.parse(message.body);
+                    showGreeting(parsed.email + " : " + parsed.content + "   " + parsed.sendTime);
+                });
 
             });
         }
@@ -42,7 +70,7 @@
         function sendName() {
             var chatusername = document.getElementById('chatusername').value;
             var name = document.getElementById('name').value;
-            stompClient.send("/app/greeting", {}, JSON.stringify({ 'content': name }));
+            stompClient.send("/app/chat.private."+chatusername, {}, JSON.stringify({ 'content': name }));
         }
         
         function showGreeting(message) {
@@ -52,12 +80,40 @@
             p.appendChild(document.createTextNode(message));
             response.appendChild(p);
         }
+        function showAccounts(accounts) {
+            var accountsp = document.getElementById('accounts');
+            var p = document.createElement('p');
+            p.style.wordWrap = 'break-word';
+            var content = "";
+            for(var key in accounts){
+                content += "  " + accounts[key].email;
+            }
+
+            p.appendChild(document.createTextNode(content));
+            accountsp.appendChild(p);
+        }
+
+        function showOnlineAccounts(account) {
+            var accountsp = document.getElementById('onlineAccounts');
+            var p = document.createElement('p');
+            p.style.wordWrap = 'break-word';
+            p.appendChild(document.createTextNode(account));
+            accountsp.appendChild(p);
+        }
     </script>
 </head>
 <body onload="disconnect()">
 <noscript><h2 style="color: #ff0000">Seems your browser doesn't support Javascript! Websocket relies on Javascript being enabled. Please enable
     Javascript and reload this page!</h2></noscript>
 <div>
+    <div>
+        all accounts:
+        <p id="accounts"></p>
+    </div>
+    <div>
+        online accounts:
+        <p id="onlineAccounts"></p>
+    </div>
     <div>
         <button id="connect" onclick="connect();">Connect</button>
         <button id="disconnect" disabled="disabled" onclick="disconnect();">Disconnect</button>

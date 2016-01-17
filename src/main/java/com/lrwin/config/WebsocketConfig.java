@@ -50,7 +50,7 @@ public class WebsocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
         config.setApplicationDestinationPrefixes("/app");
-        config.enableSimpleBroker("/topic", "/user");
+        config.enableSimpleBroker("/topic","/exchange");
     }
 
     @Override
