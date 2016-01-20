@@ -1,5 +1,7 @@
-# chat
-Using spring utils to develop chat system.Everybody can use it.
+# Function
+ - user login authentication
+ - support one to one chat
+ - support offline message 
 
 # Develop environment
  - JDK 8+
