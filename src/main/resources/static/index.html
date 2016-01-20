@@ -22,6 +22,7 @@
             stompClient = Stomp.over(socket);            
             stompClient.connect({}, function(frame) {
                 setConnected(true);
+                var username = frame.headers['user-name'];
                 console.log('Connected: ' + frame);
                 //find all accounts
                 stompClient.subscribe('/app/accounts', function(accounts){
@@ -47,13 +48,20 @@
                 stompClient.subscribe('/topic/chat.logout', function(logoutEvent){
                     var accountsp = document.getElementById('onlineAccounts');
                     alert(accountsp.value);
-//                    showAccounts(JSON.parse(logoutEvent.body).email);
+                });
+
+                //recieve these offline messages
+                stompClient.subscribe('/app/loadOfflineMessage.'+username, function(messages){
+                    var messagesList = JSON.parse(messages.body);
+                    for(var key in messagesList){
+                        showGreeting(messagesList[key].emailsrc + " : " + messagesList[key].content + "   " + messagesList[key].sendTime);
+                    }
                 });
 
                 //private chat
                 stompClient.subscribe("/user/topic/amq.direct/chat.message", function(message) {
                     var parsed = JSON.parse(message.body);
-                    showGreeting(parsed.email + " : " + parsed.content + "   " + parsed.sendTime);
+                    showGreeting(parsed.emailsrc + " : " + parsed.content + "   " + parsed.sendTime);
                 });
 
             });

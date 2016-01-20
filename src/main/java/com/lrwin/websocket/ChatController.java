@@ -5,6 +5,7 @@ import com.lrwin.domain.Message;
 import com.lrwin.event.LoginEvent;
 import com.lrwin.event.ParticipantRepository;
 import com.lrwin.service.AccountService;
+import com.lrwin.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -32,6 +33,8 @@ public class ChatController {
 
     @Autowired
     private AccountService service;
+    @Autowired
+    private MessageService messageService;
 
     @Autowired
     private ParticipantRepository participantRepository;
@@ -65,6 +68,12 @@ public class ChatController {
         return list;
     }
 
+    @SubscribeMapping("/loadOfflineMessage.{username}")
+    public List<Message> loadOfflineMessage(@DestinationVariable("username") String username){
+        List<Message> messageList = messageService.listMessage(username);
+        return messageList;
+    }
+
     /**
      * private chat
      * @param message
@@ -73,12 +82,13 @@ public class ChatController {
      */
     @MessageMapping("/chat.private.{username}")
     public void filterPrivateMessage(Message message, @DestinationVariable("username") String username, Principal principal) {
+        message.setEmailsrc(principal.getName());
+        message.setEmaildes(username);
 
-        message.setEmail(principal.getName());
-
-        simpMessagingTemplate.convertAndSendToUser(username,"/topic/amq.direct/chat.message",message);
+        if(participantRepository.exisEmail(username)){// the user`status is login
+            simpMessagingTemplate.convertAndSendToUser(username,"/topic/amq.direct/chat.message",message);
+        }else{
+            messageService.saveMessage(message);
+        }
     }
-
-
-
 }

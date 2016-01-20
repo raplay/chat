@@ -1,5 +1,6 @@
 package com.lrwin.event;
 
+import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -33,5 +34,16 @@ public class ParticipantRepository {
 
 	public void setActiveSessions(Map<String, LoginEvent> activeSessions) {
 		this.activeSessions = activeSessions;
+	}
+
+	public boolean exisEmail(String email){
+		Iterator<String> iterable = activeSessions.keySet().iterator();
+		boolean exist = false;
+		while (iterable.hasNext()){
+			if (activeSessions.get(iterable.next()).getEmail().equalsIgnoreCase(email)){
+				exist = true;
+			}
+		}
+		return exist;
 	}
 }
