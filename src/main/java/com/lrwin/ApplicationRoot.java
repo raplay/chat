@@ -2,6 +2,7 @@ package com.lrwin;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 
 /**
  * Created by dulei on 1/14/16.
@@ -11,6 +12,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * Author:Lrwin
  * Description: Using main method of the file to run application.
  */
+@EnableCaching
 @SpringBootApplication
 public class ApplicationRoot {
 
